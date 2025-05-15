@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Spam Classifier</title>
+</head>
+<body>
+  <div class="container">
+    <h1>Spam Classifier</h1>
+    <form method="POST">
+      <textarea name="email_text" placeholder="Enter email text here..." required>{{ request.form.email_text or '' }}</textarea>
+      <button type="submit">Classify</button>
+    </form>
+
+    {% if highlighted_text %}
+      <h3>Suspicious fragments:</h3>
+      <div class="highlight-container">
+        {{ highlighted_text|safe }}
+      </div>
+    {% endif %}
+
+    {% if prediction %}
+      <div class="result-card {{ prediction }}">
+        <h2>Prediction: {{ prediction|upper }}</h2>
+        {% if confidence is not none %}
+          <div class="confidence">
+            <div class="bar" style="width: {{ confidence|round(2) }}%"></div>
+            <span>{{ confidence|round(2) }}%</span>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
